@@ -42,20 +42,6 @@ fn build_ui(app: &Application) {
     let connect = Button::builder().label("Connect").margin_top(16).build();
     let spinner = Spinner::builder().valign(Align::Fill).build();
 
-    connect.connect_clicked(clone!(@strong url_label, @strong url, @strong server_pem_label, @strong server_pem, @strong client_pem_label, @strong client_pem, @strong client_key_pem_label, @strong client_key_pem, @strong connect, @strong spinner =>
-        move |_| {
-        url_label.hide();
-        url.hide();
-        server_pem_label.hide();
-        server_pem.hide();
-        client_pem_label.hide();
-        client_pem.hide();
-        client_key_pem_label.hide();
-        client_key_pem.hide();
-        connect.hide();
-        spinner.set_spinning(true);
-    }));
-
     let gtk_box = gtk::Box::builder()
         .orientation(Orientation::Vertical)
         .margin_top(16)
@@ -73,12 +59,23 @@ fn build_ui(app: &Application) {
     gtk_box.append(&client_key_pem_label);
     gtk_box.append(&client_key_pem);
     gtk_box.append(&connect);
-    gtk_box.append(&spinner);
+
+    let center_box = gtk::CenterBox::builder()
+        .orientation(Orientation::Vertical)
+        .build();
+    center_box.set_start_widget(Some(&gtk_box));
+
+    connect.connect_clicked(clone!(@strong center_box, @strong spinner =>
+        move |_| {
+        center_box.set_start_widget(gtk::Widget::NONE);
+        center_box.set_center_widget(Some(&spinner));
+        spinner.set_spinning(true);
+    }));
 
     let window = ApplicationWindow::builder()
         .application(app)
         .title("Thunder")
-        .child(&gtk_box)
+        .child(&center_box)
         .default_width(400)
         .default_height(600)
         .build();
