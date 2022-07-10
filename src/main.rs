@@ -21,6 +21,7 @@ fn build_ui(app: &Application) {
         .margin_top(16)
         .build();
     let server_pem_buffer = TextBuffer::builder()
+        .text("\n")
         .build();
     let server_pem = TextView::builder()
         .buffer(&server_pem_buffer)
@@ -31,6 +32,7 @@ fn build_ui(app: &Application) {
         .margin_top(16)
         .build();
     let client_pem_buffer = TextBuffer::builder()
+        .text("\n")
         .build();
     let client_pem = TextView::builder()
         .buffer(&client_pem_buffer)
@@ -41,6 +43,7 @@ fn build_ui(app: &Application) {
         .margin_top(16)
         .build();
     let client_key_pem_buffer = TextBuffer::builder()
+        .text("\n")
         .build();
     let client_key_pem = TextView::builder()
         .buffer(&client_key_pem_buffer)
@@ -73,6 +76,8 @@ fn build_ui(app: &Application) {
         .application(app)
         .title("Thunder")
         .child(&gtk_box)
+        .default_width(400)
+        .default_height(600)
         .build();
 
     window.present();
